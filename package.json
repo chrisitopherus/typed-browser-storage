@@ -1,0 +1,46 @@
+{
+  "name": "type-safe-storage-1",
+  "version": "1.0.0",
+  "description": "A dependency-free type-safe typescript implementation of the storage possibilities in the browser/js",
+  "main": "dist/rollup-plugin-babel.cjs.js",
+  "module": "dist/rollup-plugin-babel.esm.js",
+  "browser": "dist/rollup-plugin-babel.iife.js",
+  "types": "dist/types/index.d.ts",
+  "scripts": {
+    "build": "npm run build:types && npm run build:js",
+    "build:types": "tsc --emitDeclarationOnly",
+    "build:js": "rollup -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chrisitopherus/type-safe-storage.git"
+  },
+  "keywords": [
+    "typescript",
+    "localstorage",
+    "sessionstorage",
+    "indexedDB",
+    "dependence-free"
+  ],
+  "author": "chrisitopherus",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chrisitopherus/type-safe-storage/issues"
+  },
+  "homepage": "https://github.com/chrisitopherus/type-safe-storage#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.18.10",
+    "@babel/core": "^7.19.0",
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
+    "@babel/preset-env": "^7.19.0",
+    "@babel/preset-typescript": "^7.18.6",
+    "@rollup/plugin-babel": "^5.3.1",
+    "@rollup/plugin-commonjs": "^22.0.2",
+    "@rollup/plugin-node-resolve": "^14.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.36.2",
+    "@typescript-eslint/parser": "^5.36.2",
+    "eslint": "^8.23.0",
+    "rollup": "^2.79.0",
+    "typescript": "^4.8.3"
+  }
+}
