@@ -3,7 +3,7 @@ import { StorageItem, GetStorageItemDataByName } from "../types/utils";
 
 export abstract class AbstractLocalStorage<StorageItems extends StorageItem<any, any>> {
 
-    private _storage: Storage = localStorage;
+    protected _storage: Storage = localStorage;
 
     /**
      * Property containing the parser function that is being used for parsing.
