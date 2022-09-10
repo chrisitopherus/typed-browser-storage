@@ -76,7 +76,7 @@ export abstract class AbstractLocalStorage<StorageItems extends StorageItem<any,
 
     /**
      * Method for initializing the items with a given value.
-     * @param val Value to initialize with
+     * @param val Value to initialize with.
      * @param items Array of item keys.
      * @public
      */
