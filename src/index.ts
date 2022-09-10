@@ -1,3 +1,27 @@
 import { AbstractLocalStorage } from "./LocalStorage/main.localStorage";
+import { StorageItem } from "./types/utils";
 
 export { AbstractLocalStorage } from "./LocalStorage/main.localStorage";
+
+type LocalSotrageItems = StorageItem<"user", {
+    username: string;
+    gender: "female" | "male"
+}> | StorageItem<"amount", number>;
+
+type SessionStorageItems = StorageItem<"id", string>;
+
+class LocalStorage extends AbstractLocalStorage<LocalSotrageItems> {
+    constructor() {
+        super();
+    }
+}
+
+const local = new LocalStorage();
+
+local.initItems(null, "amount", "user");
+
+const test = local.get();
+
+console.log(test);
+
+local.setMany(["user", 1]);
