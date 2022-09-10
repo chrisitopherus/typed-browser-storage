@@ -1,1 +1,3 @@
-export { LocalStorage } from "./LocalStorage/main.localStorage";
+import { AbstractLocalStorage } from "./LocalStorage/main.localStorage";
+
+export { AbstractLocalStorage } from "./LocalStorage/main.localStorage";

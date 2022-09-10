@@ -1,23 +1,7 @@
-/**
- * LocalStorage.
- * @class
- */
-export class LocalStorage {
+export abstract class AbstractLocalStorage<T> {
 
-    private static _instance: LocalStorage;
-
-    private constructor() {
-        console.log("created Instance");
+    test?: T;
+    constructor() {
+        // 
     }
-
-    /**
-     * Method for creating or getting the instance.
-     * @public
-     * @static
-     */
-    public static get() {
-        if (!this._instance) this._instance = new LocalStorage();
-        return this._instance;
-    }
-
 }

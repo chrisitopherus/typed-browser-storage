@@ -39,7 +39,7 @@ export default {
         format: "es",
     }, {
         file: pkg.browser,
-        format: "iife",
+        format: "umd",
         name,
 
         // https://rollupjs.org/guide/en/#outputglobals
