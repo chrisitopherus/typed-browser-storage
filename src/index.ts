@@ -24,4 +24,10 @@ const test = local.get();
 
 console.log(test);
 
-local.setMany(["user", 1]);
+local.setMany({
+    amount: 1,
+    user: {
+        gender: "male",
+        username: "Chris"
+    }
+});

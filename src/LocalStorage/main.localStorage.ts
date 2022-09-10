@@ -1,5 +1,5 @@
-import { AllStorageItems, FunctionTypes } from "../types/general";
-import { StorageItem, GetStorageItemDataByName, StorageItemTuple } from "../types/utils";
+import { AllStorageItems, FunctionTypes, StorageItemMap } from "../types/general";
+import { StorageItem, GetStorageItemDataByName } from "../types/utils";
 
 export abstract class AbstractLocalStorage<StorageItems extends StorageItem<any, any>> {
 
@@ -163,12 +163,14 @@ export abstract class AbstractLocalStorage<StorageItems extends StorageItem<any,
 
     /**
      * Method for setting many items.
-     * @param items `...RestArg` Collectiopn of tuples of item name and item data.
+     * @param items Object or Map to set storage items with data.
      * @public
      */
-    public setMany(...items: StorageItemTuple<StorageItems["name"], StorageItems>[]) {
-        for (let i = 0; i < items.length; ++i) {
-            const [item, data] = items[i];
+    public setMany(items: StorageItemMap<StorageItems>) {
+        const itemKeyArr = Object.keys(items);
+        for (let i = 0; i < itemKeyArr.length; ++i) {
+            const item = itemKeyArr[i] as StorageItems["name"];
+            const data = items[item];
             try {
                 // try to stringify data
                 const stringifiedData = this._stringifier(data);

@@ -4,6 +4,10 @@ export interface FunctionTypes {
     StringifierFunction: <Data>(data: Data) => string;
 }
 
-export type AllStorageItems<Items extends StorageItem<any, any>> = {
+export type AllStorageItems<Items extends StorageItem<string, unknown>> = {
     [P in Items["name"]]?: GetStorageItemDataByName<P, Items> | null | undefined
 };
+
+export type StorageItemMap<Items extends StorageItem<string, unknown>> = {
+    [P in Items["name"]]?: GetStorageItemDataByName<P, Items>
+}
