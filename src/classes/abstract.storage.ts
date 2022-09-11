@@ -1,31 +1,37 @@
 import { AllStorageItems, FunctionTypes, StorageItemMap } from "../types/general";
-import { StorageItem, GetStorageItemDataByName } from "../types/utils";
+import { GetStorageItemDataByName, StorageItem } from "../types/utils";
 
-export abstract class AbstractLocalStorage<StorageItems extends StorageItem<any, any>> {
+export abstract class AbstractStorage<StorageItems extends StorageItem<any, any>> {
 
-    protected _storage: Storage = localStorage;
+    /**
+     * Property containing the storage that is being used.
+     * @protected
+     */
+    protected _storage: Storage;
 
     /**
      * Property containing the parser function that is being used for parsing.
-     * @private
+     * @protected
      */
-    private _parser: FunctionTypes["ParserFunction"] = this.parserFunction;
+    protected _parser: FunctionTypes["ParserFunction"] = this.parserFunction;
 
     /**
      * Property containing the stringifier function that is being used for stringifying
+     * @protected
      */
-    private _stringifier: FunctionTypes["StringifierFunction"] = this.stringifierFunction;
+    protected _stringifier: FunctionTypes["StringifierFunction"] = this.stringifierFunction;
 
-    constructor() {
-        // 
+    constructor(storage: Storage) {
+        // do nothing
+        this._storage = storage;
     }
 
     /**
-     * Parser method. Simple usage of `JSON.parse`.
-     * @param data Data to be parsed.
-     * @returns Parsed data.
-     * @private
-     */
+         * Parser method. Simple usage of `JSON.parse`.
+         * @param data Data to be parsed.
+         * @returns Parsed data.
+         * @private
+         */
     private parserFunction(data: string) {
         return JSON.parse(data);
     }
@@ -78,6 +84,7 @@ export abstract class AbstractLocalStorage<StorageItems extends StorageItem<any,
      * Method for initializing the items with a given value.
      * @param val Value to initialize with.
      * @param items Array of item keys.
+     * @returns Returns the instance for chaining.
      * @public
      */
     public initItems(val: unknown, ...items: StorageItems["name"][]) {
@@ -150,6 +157,13 @@ export abstract class AbstractLocalStorage<StorageItems extends StorageItem<any,
         }
     }
 
+    /**
+     * Method for setting an item.
+     * @param item Name of the item.
+     * @param data Data of the item.
+     * @returns Returns the instance for chaining.
+     * @public
+     */
     public set<ItemName extends StorageItems["name"]>(item: ItemName, data: GetStorageItemDataByName<ItemName, StorageItems>) {
         try {
             // try to stringify data
@@ -160,11 +174,13 @@ export abstract class AbstractLocalStorage<StorageItems extends StorageItem<any,
         } catch (error) {
             console.error(`Something went wrong while stringifying the item "${data}" ...`);
         }
+        return this;
     }
 
     /**
      * Method for setting many items.
      * @param items Object or Map to set storage items with data.
+     * @returns Returns the instance for chaining.
      * @public
      */
     public setMany(items: StorageItemMap<StorageItems>) {
@@ -182,16 +198,22 @@ export abstract class AbstractLocalStorage<StorageItems extends StorageItem<any,
                 console.error(`Something went wrong while stringifying the item "${data}" ...`);
             }
         }
+        return this;
+    }
+
+    public remove() {
+        // 
     }
 }
+
 // built in:
 
-// localStorage.getItem
-// localStorage.setItem
-// localStorage.removeItem
-// localStorage.clear
-// localStorage.key
-// localStorage.length
+// Storage.getItem
+// Storage.setItem
+// Storage.removeItem
+// Storage.clear
+// Storage.key
+// Storage.length
 
 //? ideas:
 //* .map
