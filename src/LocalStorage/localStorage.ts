@@ -4,7 +4,7 @@ import { StorageItem } from "../types/utils";
 export abstract class AbstractLocalStorage<StorageItems extends StorageItem<any, any>> extends AbstractStorage<StorageItems> {
 
     constructor() {
-        super(localStorage);
+        super(window, localStorage);
     }
 }
 // built in:

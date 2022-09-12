@@ -1,5 +1,6 @@
 import { AllStorageItems, FunctionTypes, StorageItemMap } from "../types/general";
 import { GetStorageItemDataByName, StorageItem } from "../types/utils";
+import { EventEmitter } from "./eventEmitter";
 
 export abstract class AbstractStorage<StorageItems extends StorageItem<any, any>> {
 
@@ -21,17 +22,37 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, any>
      */
     protected _stringifier: FunctionTypes["StringifierFunction"] = this.stringifierFunction;
 
-    constructor(storage: Storage) {
+    /**
+     * Property containing the event emitter that is being used.
+     * @protected
+     */
+    protected _eventEmitter = new EventEmitter();
+
+    constructor(windowObj: Window, storage: Storage) {
         // do nothing
         this._storage = storage;
+        // add listener
+        windowObj.addEventListener("storage", this.storageEventHandler);
     }
 
     /**
-         * Parser method. Simple usage of `JSON.parse`.
-         * @param data Data to be parsed.
-         * @returns Parsed data.
-         * @private
-         */
+     * Method for handling the storage event on the window object.
+     * @param event The Storage event.
+     * @private
+     */
+    private storageEventHandler = (event: StorageEvent) => {
+        console.dir(event);
+
+        // emitting the storage event
+        this._eventEmitter.emit("storage", event);
+    };
+
+    /**
+     * Parser method. Simple usage of `JSON.parse`.
+     * @param data Data to be parsed.
+     * @returns Parsed data.
+     * @private
+     */
     private parserFunction(data: string) {
         return JSON.parse(data);
     }
@@ -201,16 +222,32 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, any>
         return this;
     }
 
-    public remove() {
-        // 
+    /**
+     * Method for removing one or more items.
+     * @param items Items to be removed.
+     * @returns Returns the instance for chaining.
+     * @public
+     */
+    public remove(...items: StorageItems["name"]) {
+        // iterate through given item names
+        for (let i = 0; i < items.length; ++i) {
+            // remove item
+            this._storage.removeItem(items[i]);
+        }
+        return this;
+    }
+
+    /**
+     * Method for clearing all items from the storage.
+     * @public
+     */
+    public clear() {
+        this._storage.clear();
     }
 }
 
 // built in:
 
-// Storage.getItem
-// Storage.setItem
-// Storage.removeItem
 // Storage.clear
 // Storage.key
 // Storage.length
