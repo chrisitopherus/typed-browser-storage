@@ -274,7 +274,9 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
      * 
      * ? `For Typescript-users:` You can define the expected return type through a generic type parameter.
      */
-    public at<ExpectedReturnType = unknown>(index: number, parse?: boolean) {
+    public at<ExpectedReturnType = unknown>(index: number, parse: true): ExpectedReturnType | string | undefined
+    public at(index: number, parse?: false): string | undefined
+    public at<ExpectedReturnType extends StorageItems["data"]>(index: number, parse?: boolean) {
         // convert index if negative and also removing any fractional part 
         const convertedIndex = convertIndex(Math.trunc(index), this.length());
         // get key at index
