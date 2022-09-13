@@ -7,9 +7,11 @@
   "browser": "dist/rollup-plugin-babel.umd.js",
   "types": "dist/types/index.d.ts",
   "scripts": {
-    "build": "npm run build:types && npm run build:js",
+    "build": "set PROD_ENV=1&&npm run clean && npm run build:types && npm run build:js",
     "build:types": "tsc --emitDeclarationOnly",
-    "build:js": "rollup -c"
+    "build:js": "rollup -c",
+    "clean": "shx rm -rf dist",
+    "dev": "npm run clean && npm run build:types && npm run build:js"
   },
   "repository": {
     "type": "git",
@@ -42,6 +44,7 @@
     "eslint": "^8.23.0",
     "rollup": "^2.79.0",
     "rollup-plugin-terser": "^7.0.2",
+    "shx": "^0.3.4",
     "typescript": "^4.8.3"
   }
 }

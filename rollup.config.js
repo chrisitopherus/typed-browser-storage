@@ -4,6 +4,8 @@ import babel from "@rollup/plugin-babel";
 import pkg from "./package.json";
 import { terser } from "rollup-plugin-terser";
 
+const PROD = !JSON.parse(process.env.PROD_ENV || "0");
+
 const extensions = [
     ".js", ".jsx", ".ts", ".tsx",
 ];
@@ -29,6 +31,7 @@ export default {
             extensions,
             babelHelpers: "bundled",
             include: ["src/**/*"],
+            inputSourceMap: false,
         }),
 
         // minify
@@ -36,12 +39,15 @@ export default {
     ],
 
     output: [{
+        sourcemap: PROD,
         file: pkg.main,
         format: "cjs",
     }, {
+        sourcemap: PROD,
         file: pkg.module,
         format: "es",
     }, {
+        sourcemap: PROD,
         file: pkg.browser,
         format: "umd",
         name,
