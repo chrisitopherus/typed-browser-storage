@@ -1,7 +1,7 @@
-import { AbstractLocalStorage } from "./LocalStorage/localStorage";
+import { AbstractLocalStorage } from "./classes/LocalStorage/localStorage";
 import { StorageItem } from "./types/utils";
 
-export { AbstractLocalStorage } from "./LocalStorage/localStorage";
+export { AbstractLocalStorage } from "./classes/LocalStorage/localStorage";
 
 type LocalSotrageItems = StorageItem<"user", {
     username: string;
