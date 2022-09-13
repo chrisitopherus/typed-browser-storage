@@ -295,10 +295,32 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
         }
         return returnVal as ExpectedReturnType;
     }
+
+    /**
+     * Method performs the specified action for each item currently in the storage.
+     * @param callbackFn A function that accepts up to three arguments. forEach calls the callbackfn function one time for each item in the storage.
+     * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+     * @returns Returns the instance for chaining.
+     * @public
+     */
+    public forEach(callbackFn: (value: StorageItems["data"], index: number, array: StorageItems["data"][]) => void, thisArg?: unknown) {
+        // getting all values
+        const allValues = this.get();
+
+        // creating array of values
+        const valueArr = (Object.keys(allValues) as Array<keyof AllStorageItems<StorageItems>>).map(key => allValues[key]);
+
+        // iterating through it
+        for (let i = 0; i < valueArr.length; ++i) {
+            // calling the callback
+            callbackFn.call(thisArg, valueArr[i], i, valueArr);
+        }
+        return this;
+    }
 }
 
 //? ideas / added:
 //* .at - check
 //* .map
-//* .forEach
+//* .forEach check
 //* .filter
