@@ -268,7 +268,7 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
     /**
      * Takes an integer value and returns the item at that index in the storage, allowing for positive and negative integers. Negative integers count back from the last item in the storage.
      * @param index Index.
-     * @param parse Wether to parse the value or not. If parsing fails -> unparsed value is returned.
+     * @param parse Wether to parse the value or not. If parsing fails -> unparsed value (`string`) is returned.
      * @returns Value at the given index or `undefined`.
      * @public
      * 
@@ -289,7 +289,7 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
             if (parse) returnVal = this._parser(returnVal);
         } catch (error) {
             console.error(`Something went wrong while parsing the item "${value}" ...`);
-            return value;
+            return value as string;
         }
         return returnVal as ExpectedReturnType;
     }
