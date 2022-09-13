@@ -1,7 +1,7 @@
-import { AbstractStorage } from "../classes/abstract.storage";
-import { StorageItem } from "../types/utils";
+import { AbstractStorage } from "../abstract.storage";
+import { StorageItem } from "../../types/utils";
 
-export abstract class AbstractLocalStorage<StorageItems extends StorageItem<any, any>> extends AbstractStorage<StorageItems> {
+export abstract class AbstractLocalStorage<StorageItems extends StorageItem<any, unknown>> extends AbstractStorage<StorageItems> {
 
     constructor() {
         super(window, localStorage);
