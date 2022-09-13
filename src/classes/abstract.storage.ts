@@ -1,8 +1,9 @@
 import { AllStorageItems, FunctionTypes, StorageItemMap } from "../types/general";
 import { GetStorageItemDataByName, StorageItem } from "../types/utils";
+import { convertIndex } from "../utils/convertIndex";
 import { EventEmitter } from "./eventEmitter";
 
-export abstract class AbstractStorage<StorageItems extends StorageItem<any, any>> {
+export abstract class AbstractStorage<StorageItems extends StorageItem<any, unknown>> {
 
     /**
      * Property containing the storage that is being used.
@@ -244,15 +245,58 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, any>
     public clear() {
         this._storage.clear();
     }
+
+    /**
+     * Method for getting the name of the nth key or `null` if n is out of range.
+     * @param n Index of key.
+     * @returns Name of key at position `n` or `null`.
+     * @public
+     */
+    public key(n: number) {
+        return this._storage.key(n);
+    }
+
+    /**
+     * Method for getting the length of the storage.
+     * @returns Length of the storage.
+     * @public
+     */
+    public length() {
+        return this._storage.length;
+    }
+
+    /**
+     * Takes an integer value and returns the item at that index in the storage, allowing for positive and negative integers. Negative integers count back from the last item in the storage.
+     * @param index Index.
+     * @param parse Wether to parse the value or not. If parsing fails -> unparsed value is returned.
+     * @returns Value at the given index or `undefined`.
+     * @public
+     * 
+     * ? `For Typescript-users:` You can define the expected return type through a generic type parameter.
+     */
+    public at<ExpectedReturnType = unknown>(index: number, parse?: boolean) {
+        // convert index if negative and also removing any fractional part 
+        const convertedIndex = convertIndex(Math.trunc(index), this.length());
+        // get key at index
+        const key = this.key(convertedIndex);
+        // if no key at index -> return undefined
+        if (!key) return undefined;
+        // get value of key
+        const value = this._storage[key];
+        // check if parsing is wanted
+        let returnVal = value;
+        try {
+            if (parse) returnVal = this._parser(returnVal);
+        } catch (error) {
+            console.error(`Something went wrong while parsing the item "${value}" ...`);
+            return value;
+        }
+        return returnVal as ExpectedReturnType;
+    }
 }
 
-// built in:
-
-// Storage.clear
-// Storage.key
-// Storage.length
-
-//? ideas:
+//? ideas / added:
+//* .at - check
 //* .map
 //* .forEach
 //* .filter
