@@ -332,7 +332,7 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
      * `? For Typescript-users:` You can define the expected return type through a generic type parameter.
      * `? For Typescript-users:` Use the `GetStorageItemDataByName` type alias inside the callback for getting the correct typings.
      */
-    public map<ExpectedReturnType, T = undefined>(callbackFn: (this: T, item: [StorageItems["name"], StorageItems["data"]], index: number, array: [StorageItems["name"], StorageItems["data"]][]) => unknown, thisArg?: T): ExpectedReturnType[] {
+    public map<ExpectedReturnType, T = undefined>(callbackFn: (this: T, item: [StorageItems["name"], StorageItems["data"]], index: number, array: [StorageItems["name"], StorageItems["data"]][]) => unknown, thisArg?: T): ExpectedReturnType {
         // getting all values
         const allValues = this.get();
 
@@ -346,7 +346,7 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
             // calling the callback with optional this binding and storing the return value in a new arr
             mappedArr[i] = callbackFn.call(thisArg as T, valueArr[i], i, valueArr);
         }
-        return mappedArr as ExpectedReturnType[];
+        return mappedArr as ExpectedReturnType;
     }
 }
 
