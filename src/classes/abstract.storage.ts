@@ -355,4 +355,4 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
 //* .map - check
 //* .forEach - check
 //* .filter
-//* log
+//* .log
