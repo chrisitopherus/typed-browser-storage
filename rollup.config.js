@@ -35,7 +35,7 @@ export default {
         }),
 
         // minify
-        terser()
+        terser({ compress: PROD })
     ],
 
     output: [{
