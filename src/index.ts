@@ -20,9 +20,8 @@ const local = new LocalStorage();
 
 local.initItems(null, "amount", "user");
 
-const test = local.get();
 
-console.log(test);
+console.log(local.get());
 
 local.setMany({
     amount: 1,
@@ -31,3 +30,5 @@ local.setMany({
         username: "Chris"
     }
 });
+
+console.log(local.get());

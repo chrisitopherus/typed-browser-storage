@@ -272,7 +272,7 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
      * @returns Value at the given index or `undefined`.
      * @public
      * 
-     * ? `For Typescript-users:` You can define the expected return type through a generic type parameter.
+     * `? For Typescript-users:` You can define the expected return type through a generic type parameter.
      */
     public at<ExpectedReturnType = unknown>(index: number, parse: true): ExpectedReturnType | string | undefined
     public at(index: number, parse?: false): string | undefined
@@ -298,29 +298,61 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
 
     /**
      * Method performs the specified action for each item currently in the storage.
-     * @param callbackFn A function that accepts up to three arguments. forEach calls the callbackfn function one time for each item in the storage.
+     * @param callbackFn A function that accepts up to three arguments. forEach calls the callbackFn function one time for each item in the storage.
      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
      * @returns Returns the instance for chaining.
      * @public
+     * 
+     * `! NOTE:` Will not mutate the values inside the storage by default.
+     * 
+     * `? For Typescript-users:` Use the `GetStorageItemDataByName` type alias inside the callback for getting the correct typings.
      */
-    public forEach(callbackFn: (value: StorageItems["data"], index: number, array: StorageItems["data"][]) => void, thisArg?: unknown) {
+    public forEach<T>(callbackFn: (this: T, item: [StorageItems["name"], StorageItems["data"]], index: number, array: [StorageItems["name"], StorageItems["data"]][]) => void, thisArg?: T) {
         // getting all values
         const allValues = this.get();
 
         // creating array of values
-        const valueArr = (Object.keys(allValues) as Array<keyof AllStorageItems<StorageItems>>).map(key => allValues[key]);
+        const valueArr = (Object.keys(allValues) as Array<keyof AllStorageItems<StorageItems>>).map(key => [key, allValues[key]] as [StorageItems["name"], StorageItems["data"]]);
 
         // iterating through it
         for (let i = 0; i < valueArr.length; ++i) {
             // calling the callback
-            callbackFn.call(thisArg, valueArr[i], i, valueArr);
+            callbackFn.call(thisArg as T, valueArr[i], i, valueArr);
         }
         return this;
+    }
+
+    /**
+     * Method performs the specified action for each item currently in the storage and returns an array containing the results.
+     * @param callbackFn A function that accepts up to three arguments. The map method calls the callbackFn function one time for each item in the storage.
+     * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+     * @returns Returns the instance for chaining.
+     * @public
+     * 
+     * `? For Typescript-users:` You can define the expected return type through a generic type parameter.
+     * `? For Typescript-users:` Use the `GetStorageItemDataByName` type alias inside the callback for getting the correct typings.
+     */
+    public map<ExpectedReturnType, T = undefined>(callbackFn: (this: T, item: [StorageItems["name"], StorageItems["data"]], index: number, array: [StorageItems["name"], StorageItems["data"]][]) => unknown, thisArg?: T): ExpectedReturnType[] {
+        // getting all values
+        const allValues = this.get();
+
+        // creating array of values
+        const valueArr = (Object.keys(allValues) as Array<keyof AllStorageItems<StorageItems>>).map(key => [key, allValues[key]] as [StorageItems["name"], StorageItems["data"]]);
+
+        const mappedArr = [];
+
+        // iterating through it
+        for (let i = 0; i < valueArr.length; ++i) {
+            // calling the callback with optional this binding and storing the return value in a new arr
+            mappedArr[i] = callbackFn.call(thisArg as T, valueArr[i], i, valueArr);
+        }
+        return mappedArr as ExpectedReturnType[];
     }
 }
 
 //? ideas / added:
 //* .at - check
-//* .map
-//* .forEach check
+//* .map - check
+//* .forEach - check
 //* .filter
+//* log
