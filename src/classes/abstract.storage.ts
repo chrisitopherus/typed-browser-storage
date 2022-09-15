@@ -360,7 +360,7 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
         // creating array of values
         const valueArr = (Object.keys(allValues) as Array<keyof AllStorageItems<StorageItems>>).map(key => [key, allValues[key]] as [StorageItems["name"], StorageItems["data"]]);
 
-        const mappedArr = [];
+        const mappedArr: T[] = [];
 
         // iterating through it
         for (let i = 0; i < valueArr.length; ++i) {
