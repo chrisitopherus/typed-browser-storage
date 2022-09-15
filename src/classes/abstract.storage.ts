@@ -370,6 +370,26 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
         return mappedArr as T[];
     }
 
+    public filter() {
+        // TODO
+    }
+
+    public pop() {
+        // TODO
+    }
+
+    public find() {
+        // TODO
+    }
+
+    public findIndex() {
+        // TODO
+    }
+
+    public getProxy() {
+        // TODO
+    }
+
 
 }
 
@@ -377,5 +397,12 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
 //* .at - check
 //* .map - check
 //* .forEach - check
-//* .filter
+//* .filter -
 //* .log - check
+//* .pop
+//* .find
+//* .findIndex
+
+// create proxy object of storage, when storage is changed -> obect is updated and if object is updated -> storage is updated
+
+[1, 2, 3, 4];
