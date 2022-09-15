@@ -10,7 +10,7 @@ const extensions = [
     ".js", ".jsx", ".ts", ".tsx",
 ];
 
-const name = "RollupTypeScriptBabel";
+const name = "typedBrowserStorage";
 
 export default {
     input: "./src/index.ts",
@@ -49,7 +49,7 @@ export default {
     }, {
         sourcemap: PROD,
         file: pkg.browser,
-        format: "umd",
+        format: "iife",
         name,
 
         // https://rollupjs.org/guide/en/#outputglobals

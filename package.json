@@ -4,7 +4,7 @@
   "description": "A dependency-free type-safe typescript implementation of the storage possibilities in the browser/js",
   "main": "dist/rollup-plugin-babel.cjs.js",
   "module": "dist/rollup-plugin-babel.esm.js",
-  "browser": "dist/rollup-plugin-babel.umd.js",
+  "browser": "dist/rollup-plugin-babel.iife.js",
   "types": "dist/types/index.d.ts",
   "scripts": {
     "build": "set PROD_ENV=1&&npm run clean && npm run build:types && npm run build:js",

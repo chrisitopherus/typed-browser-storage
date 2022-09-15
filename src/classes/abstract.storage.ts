@@ -37,6 +37,18 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
     }
 
     /**
+     * Method for logging a message with a given function.
+     * @param loggerFn Function that loggs the message.
+     * @param message The message to be logged.
+     * @returns Returns the instance for chaining.
+     * @public
+     */
+    public log(loggerFn: (message: unknown) => unknown, message: unknown) {
+        loggerFn(message);
+        return this;
+    }
+
+    /**
      * Method for handling the storage event on the window object.
      * @param event The Storage event.
      * @private
@@ -71,35 +83,43 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
     /**
      * Method for setting a new parser function.
      * @param parserFn Function that parses strings from the storage.
+     * @returns Returns the instance for chaining.
      * @public
      */
     public setParser(parserFn: FunctionTypes["ParserFunction"]) {
         this._parser = parserFn;
+        return this;
     }
 
     /**
      * Method for resetting the parser function to the default one.
+     * @returns Returns the instance for chaining.
      * @public
      */
     public resetParser() {
         this._parser = this.parserFunction;
+        return this;
     }
 
     /**
      * Method for setting a new stringifier function.
      * @param stringifierFn Function that stringifies data for the storage.
+     * @returns Returns the instance for chaining.
      * @public
      */
     public setStringifier(stringifierFn: FunctionTypes["StringifierFunction"]) {
         this._stringifier = stringifierFn;
+        return this;
     }
 
     /**
      * Method for resetting the stringifier function to the default one.
+     * @returns Returns the instance for chaining.
      * @public
      */
     public resetStringifier() {
         this._stringifier = this.stringifierFunction;
+        return this;
     }
 
     /**
@@ -330,9 +350,10 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
      * @public
      * 
      * `? For Typescript-users:` You can define the expected return type through a generic type parameter.
+     * 
      * `? For Typescript-users:` Use the `GetStorageItemDataByName` type alias inside the callback for getting the correct typings.
      */
-    public map<ExpectedReturnType, T = undefined>(callbackFn: (this: T, item: [StorageItems["name"], StorageItems["data"]], index: number, array: [StorageItems["name"], StorageItems["data"]][]) => unknown, thisArg?: T): ExpectedReturnType {
+    public map<T, U = undefined>(callbackFn: (this: U, item: [StorageItems["name"], StorageItems["data"]], index: number, array: [StorageItems["name"], StorageItems["data"]][]) => T, thisArg?: U): T[] {
         // getting all values
         const allValues = this.get();
 
@@ -344,10 +365,12 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
         // iterating through it
         for (let i = 0; i < valueArr.length; ++i) {
             // calling the callback with optional this binding and storing the return value in a new arr
-            mappedArr[i] = callbackFn.call(thisArg as T, valueArr[i], i, valueArr);
+            mappedArr[i] = callbackFn.call(thisArg as U, valueArr[i], i, valueArr);
         }
-        return mappedArr as ExpectedReturnType;
+        return mappedArr as T[];
     }
+
+
 }
 
 //? ideas / added:
@@ -355,4 +378,4 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
 //* .map - check
 //* .forEach - check
 //* .filter
-//* .log
+//* .log - check

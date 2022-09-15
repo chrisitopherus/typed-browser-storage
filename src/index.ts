@@ -32,3 +32,10 @@ local.setMany({
 });
 
 console.log(local.get());
+
+const test = local.map<{ index: number }>(function (_, i) {
+    return { index: i };
+});
+
+console.log("#log with fn");
+local.log(console.log, local.get());
