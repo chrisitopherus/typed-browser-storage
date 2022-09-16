@@ -1,4 +1,10 @@
-export class EventEmitter {
+export default class EventEmitter {
+    /**
+     * Getter. Returns the current event storage as readonly.
+     */
+    public get storage() {
+        return Object.freeze([...[this._storage]][0]);
+    }
     private _storage: {
         [event: string]: Array<(data: unknown) => unknown>
     } = {};
@@ -40,5 +46,13 @@ export class EventEmitter {
             // call the listener
             this._storage[event][i](data);
         }
+    }
+
+    /**
+     * Method for clearing the event storage.
+     * @public
+     */
+    public clear() {
+        this._storage = {};
     }
 }

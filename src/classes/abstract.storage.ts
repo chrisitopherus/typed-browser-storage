@@ -1,7 +1,7 @@
 import { AllStorageItems, FunctionTypes, StorageItemMap } from "../types/general";
 import { GetStorageItemDataByName, StorageItem } from "../types/utils";
 import { convertIndex } from "../utils/convertIndex";
-import { EventEmitter } from "./eventEmitter";
+import EventEmitter from "./EventEmitter/eventEmitter";
 
 export abstract class AbstractStorage<StorageItems extends StorageItem<any, unknown>> {
 
