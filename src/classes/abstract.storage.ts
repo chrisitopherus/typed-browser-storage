@@ -44,7 +44,8 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
      * @public
      */
     public log(loggerFn: (message: unknown) => unknown, message: unknown) {
-        loggerFn(message);
+        if (typeof loggerFn === "function") loggerFn(message);
+        else throw new TypeError(`"${loggerFn}" is not a function. Please ensure that a function is passed.`);
         return this;
     }
 
@@ -87,7 +88,8 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
      * @public
      */
     public setParser(parserFn: FunctionTypes["ParserFunction"]) {
-        this._parser = parserFn;
+        if (typeof parserFn === "function") this._parser = parserFn;
+        else throw new TypeError(`"${parserFn}" is not a function. Please ensure that a function is passed.`);
         return this;
     }
 
@@ -108,7 +110,8 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
      * @public
      */
     public setStringifier(stringifierFn: FunctionTypes["StringifierFunction"]) {
-        this._stringifier = stringifierFn;
+        if (typeof stringifierFn === "function") this._stringifier = stringifierFn;
+        else throw new TypeError(`"${stringifierFn}" is not a function. Please ensure that a function is passed.`);
         return this;
     }
 
@@ -149,15 +152,15 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
      * @returns One or more items from the local storage.
      * @public
      */
-    public get<ItemName extends StorageItems["name"], ReturnData = GetStorageItemDataByName<ItemName, StorageItems>>(item: ItemName): ReturnData | null
+    public get<ItemName extends StorageItems["name"], ReturnData = GetStorageItemDataByName<ItemName, StorageItems>>(item: ItemName): ReturnData | null | undefined
     public get(item?: undefined): AllStorageItems<StorageItems>
     public get<ItemName extends StorageItems["name"], ReturnData = GetStorageItemDataByName<ItemName, StorageItems>>(item?: ItemName) {
         if (item) { // try to get item
 
             const storeItem = this._storage.getItem(item);
 
-            // if no item found -> return `null`
-            if (!storeItem) return null;
+            // if no item found -> return `undefined`
+            if (!storeItem) return undefined;
 
             try {
                 // try parsing item
@@ -190,7 +193,7 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
                     storage[key] = parsedItem;
                 } catch (error) {
                     console.error(`Something went wrong while parsing the item "${storeItem}" ...`);
-                    storage[key] = null;
+                    storage[key] = undefined;
                 }
 
             }
