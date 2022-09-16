@@ -7,7 +7,7 @@
   "browser": "dist/rollup-plugin-babel.iife.js",
   "types": "dist/types/index.d.ts",
   "scripts": {
-    "test": "jest --verbose",
+    "test": "jest --verbose --silent",
     "build": "set PROD_ENV=1&&npm run clean && npm run build:types && npm run build:js",
     "build:types": "tsc --emitDeclarationOnly",
     "build:js": "rollup -c",

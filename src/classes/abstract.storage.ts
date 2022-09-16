@@ -140,7 +140,7 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
                 // initialize key with value
                 this._storage.setItem(items[i], stringified);
             } catch (error) {
-                console.error(`Something went wrong while parsing the value "${val}" ...`);
+                // do nothing - skip
             }
         }
         return this;
@@ -167,7 +167,6 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
                 return this._parser(storeItem) as ReturnData;
 
             } catch (error) {
-                console.error(`Something went wrong while parsing the item "${storeItem}" ...`);
                 // something went wrong -> return `null`
                 return null;
             }
@@ -192,8 +191,7 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
                     // store it in local variable
                     storage[key] = parsedItem;
                 } catch (error) {
-                    console.error(`Something went wrong while parsing the item "${storeItem}" ...`);
-                    storage[key] = undefined;
+                    storage[key] = null;
                 }
 
             }
