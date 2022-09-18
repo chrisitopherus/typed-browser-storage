@@ -227,21 +227,25 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
      * @public
      */
     public setMany(items: StorageItemMap<StorageItems>) {
-        const itemKeyArr = Object.keys(items);
-        for (let i = 0; i < itemKeyArr.length; ++i) {
-            const item = itemKeyArr[i] as StorageItems["name"];
-            const data = items[item];
-            try {
-                // try to stringify data
-                const stringifiedData = this._stringifier(data);
+        if (typeof items === "object" &&
+            !Array.isArray(items) &&
+            items !== null && !(items instanceof Map)) {
+            const itemKeyArr = Object.keys(items);
+            for (let i = 0; i < itemKeyArr.length; ++i) {
+                const item = itemKeyArr[i] as StorageItems["name"];
+                const data = items[item];
+                try {
+                    // try to stringify data
+                    const stringifiedData = this._stringifier(data);
 
-                // setting data
-                this._storage.setItem(item, stringifiedData);
-            } catch (error) {
-                console.error(`Something went wrong while stringifying the item "${data}" ...`);
+                    // setting data
+                    this._storage.setItem(item, stringifiedData);
+                } catch (error) {
+                    console.error(`Something went wrong while stringifying the item "${data}" ...`);
+                }
             }
-        }
-        return this;
+            return this;
+        } else throw new TypeError(`"${items}" is not an object. Please ensure that an object is passed.`);
     }
 
     /**
@@ -250,7 +254,7 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
      * @returns Returns the instance for chaining.
      * @public
      */
-    public remove(...items: StorageItems["name"]) {
+    public remove(...items: StorageItems["name"][]) {
         // iterate through given item names
         for (let i = 0; i < items.length; ++i) {
             // remove item
@@ -275,6 +279,15 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
      */
     public key(n: number) {
         return this._storage.key(n);
+    }
+
+    /**
+     * Method for getting all the keys that are currently in storage.
+     * @returns Array of keys.
+     * @public
+     */
+    public keys() {
+        return Object.keys(this.get()) as StorageItems["name"][];
     }
 
     /**
