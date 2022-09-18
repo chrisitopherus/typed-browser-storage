@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import { describe, expect, test, jest } from "@jest/globals";
-import { LocalStorage } from "./boilerplate";
+import { LocalStorage } from "./setup";
 // clearing the mock functions after each test
 afterEach(() => {
     jest.clearAllMocks();

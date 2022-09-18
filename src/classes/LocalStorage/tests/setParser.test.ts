@@ -3,7 +3,7 @@
  */
 import { describe, expect, test, jest } from "@jest/globals";
 import { AllStorageItems } from "../../../types/general";
-import { LocalStorage, LocalSotrageItemsTest } from "./boilerplate";
+import { LocalStorage, LocalSotrageItemsTest } from "./setup";
 // clearing the mock functions after each test
 afterEach(() => {
     jest.clearAllMocks();
