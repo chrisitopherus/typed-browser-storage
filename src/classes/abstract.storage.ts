@@ -1,8 +1,7 @@
-import { AllStorageItems, FunctionTypes, StorageItemMap } from "../types/general";
+import { AllStorageItems, FunctionTypes, ProxyObject, StorageItemMap } from "../types/general";
 import { GetStorageItemDataByName, StorageItem } from "../types/utils";
 import { convertIndex } from "../utils/convertIndex";
 import EventEmitter from "./EventEmitter/eventEmitter";
-
 export abstract class AbstractStorage<StorageItems extends StorageItem<any, unknown>> {
 
     /**
@@ -10,6 +9,18 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
      * @protected
      */
     protected _storage: Storage;
+
+    /**
+     * Property containing the proxy object of the storage.
+     * 
+     * ? Is `undefined` if used in a browser which does not support the `Proxy` class.
+     * @public
+     */
+    public proxyStorage = Proxy ? new Proxy<ProxyObject<StorageItems>>({} as ProxyObject<StorageItems>, {
+        get(target, p: StorageItems["name"], receiver) {
+            return target[p] as typeof target[typeof p] extends infer Property ? Readonly<Property> : never;
+        },
+    }) : undefined;
 
     /**
      * Property containing the parser function that is being used for parsing.
@@ -397,10 +408,6 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
     }
 
     public findIndex() {
-        // TODO
-    }
-
-    public getProxy() {
         // TODO
     }
 
