@@ -6,7 +6,7 @@ export { AbstractLocalStorage } from "./classes/LocalStorage/localStorage";
 type LocalSotrageItems = StorageItem<"user", {
     username: string;
     gender: "female" | "male"
-}> | StorageItem<"amount", number>;
+}> | StorageItem<"amount", number> | StorageItem<"testArray", number[]>;
 
 type SessionStorageItems = StorageItem<"id", string>;
 
@@ -39,3 +39,7 @@ const test = local.map<{ index: number }>(function (_, i) {
 
 console.log("#log with fn");
 local.log(console.log, local.get());
+if (local.proxyStorage) {
+    local.proxyStorage.amount = 10;
+    const test = local.proxyStorage.testArray;
+}
