@@ -18,7 +18,7 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
      */
     public proxyStorage = Proxy ? new Proxy<ProxyObject<StorageItems>>({} as ProxyObject<StorageItems>, {
         get(target, p: StorageItems["name"], receiver) {
-            return target[p] as typeof target[typeof p] extends infer Property ? Readonly<Property> : never;
+            return target[p] as Readonly<typeof target>[typeof p] extends infer Property ? Property : never;
         },
     }) : undefined;
 
@@ -308,6 +308,16 @@ export abstract class AbstractStorage<StorageItems extends StorageItem<any, unkn
      */
     public length() {
         return this._storage.length;
+    }
+
+    /**
+     * Returns the index of the first occurrence of a key in an the storage, or -1 if it is not present.
+     * @param item The item to locate in the storage.
+     * @returns Index of the item in the storage.
+     * @public
+     */
+    public indexOf(item: StorageItems["name"]) {
+        return this.keys().indexOf(item);
     }
 
     /**
